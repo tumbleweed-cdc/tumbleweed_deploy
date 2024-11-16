@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    aws = { source = "hashicorp/aws", version = "5.17.0" }
+    aws = { source = "hashicorp/aws", version = "5.76.0" }
   }
 }
 
@@ -179,7 +179,7 @@ resource "aws_cloudwatch_log_group" "tumbleweed_app_log_group" {
 }
 
 resource "aws_ecs_task_definition" "kafka_controller_1" {
-  family                   = "kafka-controller-task"
+  family                   = "kafka-controller-1-task"
   network_mode            = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                     = "512"
@@ -209,7 +209,8 @@ resource "aws_ecs_task_definition" "kafka_controller_1" {
         { name = "KAFKA_NODE_ID", value = "1" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
         # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
+        { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "KAFKA_LISTENERS", value = "CONTROLLER://:9093" },
@@ -225,7 +226,7 @@ resource "aws_ecs_task_definition" "kafka_controller_1" {
 }
 
 resource "aws_ecs_task_definition" "kafka_controller_2" {
-  family                   = "kafka-controller-task"
+  family                   = "kafka-controller-2-task"
   network_mode            = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                     = "512"
@@ -255,7 +256,8 @@ resource "aws_ecs_task_definition" "kafka_controller_2" {
         { name = "KAFKA_NODE_ID", value = "2" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
         # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
+        { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "KAFKA_LISTENERS", value = "CONTROLLER://:9093" },
@@ -271,7 +273,7 @@ resource "aws_ecs_task_definition" "kafka_controller_2" {
 }
 
 resource "aws_ecs_task_definition" "kafka_controller_3" {
-  family                   = "kafka-controller-task"
+  family                   = "kafka-controller-3-task"
   network_mode            = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                     = "512"
@@ -301,10 +303,11 @@ resource "aws_ecs_task_definition" "kafka_controller_3" {
         { name = "KAFKA_NODE_ID", value = "3" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
         # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
-        { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
+        { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
+        { name = "KAFKA_LISTENERS", value = "CONTROLLER://:9093" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
         { name = "KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS", value = "0" },
@@ -317,7 +320,7 @@ resource "aws_ecs_task_definition" "kafka_controller_3" {
 }
 
 resource "aws_ecs_task_definition" "kafka_broker_1" {
-  family                   = "kafka-broker-task"
+  family                   = "kafka-broker-1"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "512"
@@ -329,13 +332,13 @@ resource "aws_ecs_task_definition" "kafka_broker_1" {
       name      = "kafka-broker-1"
       image     = "apache/kafka:3.9.0"
       essential = true
-      portMappings = [
+      pportMappings = [
         {
-          containerPort = 9092  # Kafka's internal port
+          containerPort = 9092
           protocol      = "tcp"
         },
         {
-          containerPort = 19092  # External port for PLAINTEXT
+          containerPort = 19092
           protocol      = "tcp"
         }
       ]
@@ -350,12 +353,15 @@ resource "aws_ecs_task_definition" "kafka_broker_1" {
       environment = [
         { name = "KAFKA_NODE_ID", value = "4" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
+        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-1.kafka.local:19092,PLAINTEXT_HOST://localhost:29092" },
         # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-1:19092,PLAINTEXT_HOST://localhost:29092" },
-        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-1.kafka.local:19092,PLAINTEXT_HOST://localhost:29092" },
+        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-1.internal:9092,PLAINTEXT_HOST://<external-ip-or-nlb-dns>:19092" }
+        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-1.kafka.local:19092,PLAINTEXT_HOST://localhost:29092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -369,7 +375,7 @@ resource "aws_ecs_task_definition" "kafka_broker_1" {
 }
 
 resource "aws_ecs_task_definition" "kafka_broker_2" {
-  family                   = "kafka-broker-2-task"
+  family                   = "kafka-broker-2"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "512"
@@ -383,11 +389,11 @@ resource "aws_ecs_task_definition" "kafka_broker_2" {
       essential = true
       portMappings = [
         {
-          containerPort = 9092  # Kafka's internal port
+          containerPort = 9092
           protocol      = "tcp"
         },
         {
-          containerPort = 19092  # External port for PLAINTEXT
+          containerPort = 19092
           protocol      = "tcp"
         }
       ]
@@ -402,12 +408,14 @@ resource "aws_ecs_task_definition" "kafka_broker_2" {
       environment = [
         { name = "KAFKA_NODE_ID", value = "5" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-3:19092,PLAINTEXT_HOST://localhost:39092" },
-        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-2.kafka.local:19092,PLAINTEXT_HOST://localhost:39092" },
+        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-2.kafka.local:19092,PLAINTEXT_HOST://localhost:39092" },
+        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-2:19092,PLAINTEXT_HOST://localhost:39092" },
+        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-2.kafka.local:19092,PLAINTEXT_HOST://localhost:39092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -420,7 +428,7 @@ resource "aws_ecs_task_definition" "kafka_broker_2" {
 }
 
 resource "aws_ecs_task_definition" "kafka_broker_3" {
-  family                   = "kafka-broker-3-task"
+  family                   = "kafka-broker-3"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "512"
@@ -434,11 +442,11 @@ resource "aws_ecs_task_definition" "kafka_broker_3" {
       essential = true
       portMappings = [
         {
-          containerPort = 9092  # Kafka's internal port
+          containerPort = 9092
           protocol      = "tcp"
         },
         {
-          containerPort = 19092  # External port for PLAINTEXT_HOST
+          containerPort = 19092
           protocol      = "tcp"
         }
       ]
@@ -453,12 +461,14 @@ resource "aws_ecs_task_definition" "kafka_broker_3" {
       environment = [
         { name = "KAFKA_NODE_ID", value = "6" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
+        { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
+        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-3.kafka.local:19092,PLAINTEXT_HOST://localhost:49092" },
         # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-3:19092,PLAINTEXT_HOST://localhost:49092" },
-        { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-3.kafka.local:19092,PLAINTEXT_HOST://localhost:49092" },
+        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-3.kafka.local:19092,PLAINTEXT_HOST://localhost:49092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -515,14 +525,19 @@ resource "aws_ecs_task_definition" "connect" {
       image     = "debezium/connect:3.0.0.Final"
       essential = true
       portMappings = [
-        { containerPort = 8083 }
+        { 
+          containerPort = 8083
+          protocol      = "tcp"
+        }
       ]
       environment = [
-        { "name" = "BOOTSTRAP_SERVERS", "value" = "kafka-1:19092,kafka-2:19092,kafka-3:19092" },
-        { "name" = "GROUP_ID", "value" = "1" },
-        { "name" = "CONFIG_STORAGE_TOPIC", "value" = "connect_configs" },
-        { "name" = "OFFSET_STORAGE_TOPIC", "value" = "connect_offsets" },
-        { "name" = "ENABLE_APICURIO_CONVERTERS", "value" = "true" }
+        # { name = "BOOTSTRAP_SERVERS", value = "kafka-1:19092,kafka-2:19092,kafka-3:19092" },
+        # { name = "BOOTSTRAP_SERVERS", value = "kafka-broker-1.kafka.local:19092,kafka-broker-2.kafka.local:19092,kafka-broker-3.kafka.local:19092" },
+        { name  = "BOOTSTRAP_SERVERS", value = "kafka-1.kafka.local:19092,kafka-2.kafka.local:19092,kafka-3.kafka.local:19092"},
+        { name = "GROUP_ID", value = "1" },
+        { name = "CONFIG_STORAGE_TOPIC", value = "connect_configs" },
+        { name = "OFFSET_STORAGE_TOPIC", value = "connect_offsets" },
+        { name = "ENABLE_APICURIO_CONVERTERS", value = "true" }
       ]
       healthCheck = {
         command     = ["CMD-SHELL", "curl -f http://localhost:8083/ || exit 1"]
@@ -554,7 +569,7 @@ resource "aws_ecs_task_definition" "tumbleweed_user_config_db" {
   container_definitions = jsonencode([
     {
       name  = "tumbleweed-user-config-db"
-      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/tumbleweed-app:latest"
+      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/postgres:latest"
       essential = true
       portMappings = [
         {
@@ -571,9 +586,9 @@ resource "aws_ecs_task_definition" "tumbleweed_user_config_db" {
         }
       }
       environment = [
-        { name = "POSTGRES_USER", value = "postgres" },
+        { name = "POSTGRES_USER", value = "tumbleweed_user" },
         { name = "POSTGRES_PASSWORD", value = "postgres" },
-        { name = "POSTGRES_DB", value = "userconfig" }
+        { name = "POSTGRES_DB", value = "user_configs" }
       ]
     }
   ])
@@ -590,7 +605,7 @@ resource "aws_ecs_task_definition" "tumbleweed_app" {
   container_definitions = jsonencode([
     {
       name = "tumbleweed-app"
-      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/tumbleweed-app@sha256:0f2b8e67969e9414956a802a2cd9b1eb50d78d3067754e6e0de3128ce3086b6b"
+      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/tumbleweed-app:1.4.1"
       essential = true
       portMappings = [
         {
@@ -654,6 +669,14 @@ resource "aws_route_table" "public_route_table" {
 resource "aws_security_group" "ecs_security_group" {
   vpc_id = aws_vpc.main.id
   name = "tumbleweed-ecs-sg"
+
+  # Ingress rules for internal communication as needed
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["10.0.0.0/16"]  # Allow traffic within the VPC
+  }
 
   ingress {
     from_port   = 9092
@@ -723,62 +746,6 @@ resource "aws_security_group" "ecs_security_group" {
   }
 }
 
-# resource "aws_security_group" "database_security_group" {
-#   vpc_id = aws_vpc.main.id
-#   name = "tumbleweed-database-sg"
-
-#   ingress {
-#     from_port = 5432
-#     to_port = 5432
-#     protocol = "tcp"
-#     cidr_blocks = ["10.0.0.0/16"]
-#   }
-
-#   egress {
-#     from_port = 0
-#     to_port = 0
-#     protocol = "-1"
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-
-#   tags = {
-#     Name = "tumbleweed-database-sg"
-#   }
-# }
-
-resource "aws_subnet" "private_subnet" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.2.0/24"
-  map_public_ip_on_launch = false
-  tags = {
-    Name = "tumbleweed-private-subnet"
-  }
-}
-
-resource "aws_vpc_endpoint" "ecr_api" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.us-east-1.ecr.api"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.private_subnet.id]
-  security_group_ids = [aws_security_group.ecs_security_group.id]
-}
-
-resource "aws_vpc_endpoint" "ecr_dkr" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.us-east-1.ecr.dkr"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.private_subnet.id]
-  security_group_ids = [aws_security_group.ecs_security_group.id]
-}
-
-resource "aws_vpc_endpoint" "logs" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.us-east-1.logs"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [aws_subnet.private_subnet.id]
-  security_group_ids = [aws_security_group.ecs_security_group.id]
-}
-
 # Elastic IP for NAT Gateway
 resource "aws_eip" "nat" {
   associate_with_private_ip = true
@@ -788,26 +755,6 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public_subnet.id
-}
-
-# Update Route Table for private subnet to use NAT
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.main.id
-
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
-
-  tags = {
-    Name = "tumbleweed-private-route-table"
-  }
-}
-
-# Associate the private route table with the private subnet
-resource "aws_route_table_association" "private_subnet_association" {
-  subnet_id      = aws_subnet.private_subnet.id
-  route_table_id = aws_route_table.private_route_table.id
 }
 
 resource "aws_security_group" "ecr_endpoint_sg" {
@@ -829,28 +776,143 @@ resource "aws_security_group" "ecr_endpoint_sg" {
   }
 }
 
-resource "aws_service_discovery_private_dns_namespace" "kafka_namespace" {
-  name        = "kafka.local"  # Choose a suitable name
+# Private DNS Namespace for Service Discovery
+resource "aws_service_discovery_private_dns_namespace" "kafka" {
+  name        = "kafka.local"
+  description = "Kafka cluster service discovery namespace"
   vpc         = aws_vpc.main.id
-  description = "Service discovery namespace for Kafka brokers"
 }
 
-resource "aws_service_discovery_service" "kafka_service" {
-  name = "kafka-service"
-
-  namespace_id = aws_service_discovery_private_dns_namespace.kafka_namespace.id
+# Service Discovery for Controllers
+resource "aws_service_discovery_service" "kafka_controller_1" {
+  name = "controller-1"
 
   dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.kafka_namespace.id
-
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
     dns_records {
+      ttl  = 10
       type = "A"
-      ttl  = 60
     }
   }
+}
 
-  health_check_custom_config {
-    failure_threshold = 1
+resource "aws_service_discovery_service" "kafka_controller_2" {
+  name = "controller-2"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "kafka_controller_3" {
+  name = "controller-3"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+# Service Discovery for Brokers
+resource "aws_service_discovery_service" "kafka_broker_1" {
+  name = "kafka-1"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "kafka_broker_2" {
+  name = "kafka-2"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "kafka_broker_3" {
+  name = "kafka-3"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+# Service Discovery for Connect and Apicurio
+resource "aws_service_discovery_service" "connect" {
+  name = "connect"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "apicurio" {
+  name = "apicurio"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "tumbleweed_app" {
+  name = "tumbleweed_app"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+  }
+}
+
+resource "aws_service_discovery_service" "tumbleweed_config_db" {
+  name = "tumbleweed_config_db"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.kafka.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
   }
 }
 
@@ -863,13 +925,13 @@ resource "aws_ecs_service" "kafka_controller_1" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]  # Change to private subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false  # Set to false for private subnet
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_controller_1.arn
   }
 }
 
@@ -881,13 +943,13 @@ resource "aws_ecs_service" "kafka_controller_2" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]  # Change to private subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false  # Set to false for private subnet
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_controller_2.arn
   }
 }
 
@@ -899,106 +961,15 @@ resource "aws_ecs_service" "kafka_controller_3" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]  # Change to private subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false  # Set to false for private subnet
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_controller_3.arn
   }
 }
-
-
-# # Create ECS Services for Kafka Controllers
-# resource "aws_ecs_service" "kafka_controller_1" {
-#   name            = "kafka-controller-1"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_controller_1.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = true
-#   }
-# }
-
-# resource "aws_ecs_service" "kafka_controller_2" {
-#   name            = "kafka-controller-2"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_controller_2.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = true
-#   }
-# }
-
-# resource "aws_ecs_service" "kafka_controller_3" {
-#   name            = "kafka-controller-3"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_controller_3.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = true
-#   }
-# }
-
-# Create ECS Services for Kafka Brokers
-# resource "aws_ecs_service" "kafka_broker_1" {
-#   name            = "kafka-broker-1"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_broker_1.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-
-#   network_configuration {
-#     subnets          = [aws_subnet.private_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = false
-#   }
-
-#   service_registries {
-#     registry_arn = aws_service_discovery_private_dns_namespace.kafka_namespace.arn
-#   }
-# }
-
-# resource "aws_ecs_service" "kafka_broker_2" {
-#   name            = "kafka-broker-2"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_broker_2.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = true
-#   }
-# }
-
-# resource "aws_ecs_service" "kafka_broker_3" {
-#   name            = "kafka-broker-3"
-#   cluster         = aws_ecs_cluster.main.id
-#   task_definition = aws_ecs_task_definition.kafka_broker_3.arn
-#   desired_count   = 1
-#   launch_type     = "FARGATE"
-  
-#   network_configuration {
-#     subnets          = [aws_subnet.public_subnet.id]
-#     security_groups  = [aws_security_group.ecs_security_group.id]
-#     assign_public_ip = true
-#   }
-# }
 
 # Create ECS Services for Kafka Brokers
 resource "aws_ecs_service" "kafka_broker_1" {
@@ -1009,13 +980,13 @@ resource "aws_ecs_service" "kafka_broker_1" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_broker_1.arn
   }
 }
 
@@ -1027,13 +998,13 @@ resource "aws_ecs_service" "kafka_broker_2" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_broker_2.arn
   }
 }
 
@@ -1043,15 +1014,15 @@ resource "aws_ecs_service" "kafka_broker_3" {
   task_definition = aws_ecs_task_definition.kafka_broker_3.arn
   desired_count   = 1
   launch_type     = "FARGATE"
-
+  
   network_configuration {
-    subnets          = [aws_subnet.private_subnet.id]
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.kafka_service.arn
+    registry_arn = aws_service_discovery_service.kafka_broker_3.arn
   }
 }
 
@@ -1068,6 +1039,12 @@ resource "aws_ecs_service" "apicurio_registry" {
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.apicurio.arn
+  }
+
+  # enable_execute_command = true
 }
 
 # Create ECS Service for Connect Debezium
@@ -1082,6 +1059,10 @@ resource "aws_ecs_service" "connect" {
     subnets          = [aws_subnet.public_subnet.id]  # Reference your subnet
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.connect.arn
   }
 }
 
@@ -1098,6 +1079,12 @@ resource "aws_ecs_service" "tumbleweed_user_config_db" {
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.tumbleweed_config_db.arn
+  }
+
+  # enable_execute_command = true
 }
 
 # Create ECS Service for Tumbleweed App
@@ -1113,6 +1100,12 @@ resource "aws_ecs_service" "tumbleweed_app" {
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.tumbleweed_app.arn
+  }
+
+  # enable_execute_command = true
 }
 
 resource "aws_route_table_association" "public_subnet_association" {
