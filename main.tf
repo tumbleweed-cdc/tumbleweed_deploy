@@ -193,7 +193,7 @@ resource "aws_ecs_task_definition" "kafka_controller_1" {
       essential = true
       portMappings = [
         {
-          containerPort = 9093  # Kafka's controller port
+          containerPort = 9093
           protocol      = "tcp"
         }
       ]
@@ -201,15 +201,13 @@ resource "aws_ecs_task_definition" "kafka_controller_1" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_controller_1_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "1" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
         { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
@@ -240,7 +238,7 @@ resource "aws_ecs_task_definition" "kafka_controller_2" {
       essential = true
       portMappings = [
         {
-          containerPort = 9093  # Kafka's controller port
+          containerPort = 9093
           protocol      = "tcp"
         }
       ]
@@ -248,15 +246,13 @@ resource "aws_ecs_task_definition" "kafka_controller_2" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_controller_2_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "2" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
         { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
@@ -287,7 +283,7 @@ resource "aws_ecs_task_definition" "kafka_controller_3" {
       essential = true
       portMappings = [
         {
-          containerPort = 9093  # Kafka's controller port
+          containerPort = 9093
           protocol      = "tcp"
         }
       ]
@@ -295,15 +291,13 @@ resource "aws_ecs_task_definition" "kafka_controller_3" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_controller_3_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "3" },
         { name = "KAFKA_PROCESS_ROLES", value = "controller" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@kafka-controller-1.kafka.local:9093,2@kafka-controller-2.kafka.local:9093,3@kafka-controller-3.kafka.local:9093" },  # Use DNS names
         { name  = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
@@ -346,22 +340,18 @@ resource "aws_ecs_task_definition" "kafka_broker_1" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_broker_1_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "4" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
         { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-1.kafka.local:19092,PLAINTEXT_HOST://localhost:29092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-1:19092,PLAINTEXT_HOST://localhost:29092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-1.internal:9092,PLAINTEXT_HOST://<external-ip-or-nlb-dns>:19092" }
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-1.kafka.local:19092,PLAINTEXT_HOST://localhost:29092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -401,21 +391,18 @@ resource "aws_ecs_task_definition" "kafka_broker_2" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_broker_2_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "5" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
         { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-2.kafka.local:19092,PLAINTEXT_HOST://localhost:39092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-2:19092,PLAINTEXT_HOST://localhost:39092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-2.kafka.local:19092,PLAINTEXT_HOST://localhost:39092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -454,21 +441,18 @@ resource "aws_ecs_task_definition" "kafka_broker_3" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.kafka_broker_3_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
       environment = [
         { name = "KAFKA_NODE_ID", value = "6" },
         { name = "KAFKA_PROCESS_ROLES", value = "broker" },
-        # { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1:9093,2@controller-2:9093,3@controller-3:9093" },
         { name = "KAFKA_CONTROLLER_QUORUM_VOTERS", value = "1@controller-1.kafka.local:9093,2@controller-2.kafka.local:9093,3@controller-3.kafka.local:9093" },
         { name = "KAFKA_LISTENERS", value = "PLAINTEXT://:19092,PLAINTEXT_HOST://:9092" },
         { name = "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", value = "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT" },
         { name = "KAFKA_INTER_BROKER_LISTENER_NAME", value = "PLAINTEXT" },
         { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-3.kafka.local:19092,PLAINTEXT_HOST://localhost:49092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-3:19092,PLAINTEXT_HOST://localhost:49092" },
-        # { name = "KAFKA_ADVERTISED_LISTENERS", value = "PLAINTEXT://kafka-broker-3.kafka.local:19092,PLAINTEXT_HOST://localhost:49092" },
         { name = "KAFKA_CONTROLLER_LISTENER_NAMES", value = "CONTROLLER" },
         { name = "CLUSTER_ID", value = "4L6g3nShT-eMCtK--X86sw" },
         { name = "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", value = "3" },
@@ -503,7 +487,7 @@ resource "aws_ecs_task_definition" "apicurio_registry" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.apicurio_registry_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
@@ -531,8 +515,6 @@ resource "aws_ecs_task_definition" "connect" {
         }
       ]
       environment = [
-        # { name = "BOOTSTRAP_SERVERS", value = "kafka-1:19092,kafka-2:19092,kafka-3:19092" },
-        # { name = "BOOTSTRAP_SERVERS", value = "kafka-broker-1.kafka.local:19092,kafka-broker-2.kafka.local:19092,kafka-broker-3.kafka.local:19092" },
         { name  = "BOOTSTRAP_SERVERS", value = "kafka-1.kafka.local:19092,kafka-2.kafka.local:19092,kafka-3.kafka.local:19092"},
         { name = "GROUP_ID", value = "1" },
         { name = "CONFIG_STORAGE_TOPIC", value = "connect_configs" },
@@ -550,7 +532,7 @@ resource "aws_ecs_task_definition" "connect" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.connect_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
@@ -581,7 +563,7 @@ resource "aws_ecs_task_definition" "tumbleweed_user_config_db" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.tumbleweed_user_config_db_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
@@ -617,7 +599,7 @@ resource "aws_ecs_task_definition" "tumbleweed_app" {
         logDriver = "awslogs"
         options = {
           "awslogs-group"         = aws_cloudwatch_log_group.tumbleweed_app_log_group.name
-          "awslogs-region"        = "us-east-1"  # Change to your region
+          "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
       }
@@ -658,7 +640,7 @@ resource "aws_route_table" "public_route_table" {
 
   route {
     cidr_block     = "0.0.0.0/0"
-    gateway_id     = aws_internet_gateway.igw.id  # Route traffic to the Internet Gateway
+    gateway_id     = aws_internet_gateway.igw.id
   }
 
   tags = {
@@ -682,35 +664,35 @@ resource "aws_security_group" "ecs_security_group" {
     from_port   = 9092
     to_port     = 9092
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Change as needed
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 19092
     to_port     = 19092
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Change as needed
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Change as needed
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 8083
     to_port     = 8083
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Change as needed
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Change as needed
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -1035,7 +1017,7 @@ resource "aws_ecs_service" "apicurio_registry" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]  # Reference your subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
@@ -1043,8 +1025,6 @@ resource "aws_ecs_service" "apicurio_registry" {
   service_registries {
     registry_arn = aws_service_discovery_service.apicurio.arn
   }
-
-  # enable_execute_command = true
 }
 
 # Create ECS Service for Connect Debezium
@@ -1056,7 +1036,7 @@ resource "aws_ecs_service" "connect" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]  # Reference your subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
@@ -1075,7 +1055,7 @@ resource "aws_ecs_service" "tumbleweed_user_config_db" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]  # Reference your subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
@@ -1083,8 +1063,6 @@ resource "aws_ecs_service" "tumbleweed_user_config_db" {
   service_registries {
     registry_arn = aws_service_discovery_service.tumbleweed_config_db.arn
   }
-
-  # enable_execute_command = true
 }
 
 # Create ECS Service for Tumbleweed App
@@ -1096,7 +1074,7 @@ resource "aws_ecs_service" "tumbleweed_app" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [aws_subnet.public_subnet.id]  # Reference your subnet
+    subnets          = [aws_subnet.public_subnet.id]
     security_groups  = [aws_security_group.ecs_security_group.id]
     assign_public_ip = true
   }
@@ -1104,8 +1082,6 @@ resource "aws_ecs_service" "tumbleweed_app" {
   service_registries {
     registry_arn = aws_service_discovery_service.tumbleweed_app.arn
   }
-
-  # enable_execute_command = true
 }
 
 resource "aws_route_table_association" "public_subnet_association" {
