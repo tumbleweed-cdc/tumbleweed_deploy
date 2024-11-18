@@ -5,6 +5,7 @@ module networking {
 module "security" {
   source = "./security"
   vpc_id = module.networking.vpc_id
+  allowed_ips = var.allowed_ips
 }
 
 module "cloudwatch" {
@@ -18,6 +19,7 @@ module "ecs" {
   execution_role_arn = module.iam.ecs_task_execution_role_arn
   ecs_security_group_id = module.security.ecs_security_group_id
   public_subnet_id = module.networking.public_subnet_id
+  private_subnet_id = module.networking.private_subnet_id
   kafka_controller_1_log_group_name = module.cloudwatch.kafka_controller_1_log_group_name
   kafka_controller_2_log_group_name = module.cloudwatch.kafka_controller_2_log_group_name
   kafka_controller_3_log_group_name = module.cloudwatch.kafka_controller_3_log_group_name

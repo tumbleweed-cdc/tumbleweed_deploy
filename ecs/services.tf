@@ -6,9 +6,9 @@ resource "aws_ecs_service" "kafka_controller_1" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -24,9 +24,9 @@ resource "aws_ecs_service" "kafka_controller_2" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -42,9 +42,9 @@ resource "aws_ecs_service" "kafka_controller_3" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -60,9 +60,9 @@ resource "aws_ecs_service" "kafka_broker_1" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -78,9 +78,9 @@ resource "aws_ecs_service" "kafka_broker_2" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -96,9 +96,9 @@ resource "aws_ecs_service" "kafka_broker_3" {
   launch_type     = "FARGATE"
   
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -114,9 +114,9 @@ resource "aws_ecs_service" "apicurio_registry" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -132,9 +132,9 @@ resource "aws_ecs_service" "connect" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
@@ -150,9 +150,9 @@ resource "aws_ecs_service" "tumbleweed_user_config_db" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = [var.public_subnet_id]
+    subnets          = [var.private_subnet_id]
     security_groups  = [var.ecs_security_group_id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   service_registries {
