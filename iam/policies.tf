@@ -12,6 +12,7 @@ resource "aws_iam_policy" "consumer_access_policy" {
           "ecs:ListTasks",
           "ecs:StartTask",
           "ec2:DescribeNetworkInterfaces",
+          "ec2:DissociateAddress",
         ],
         Resource = "*"
       },

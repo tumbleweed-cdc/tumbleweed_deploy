@@ -1,0 +1,20 @@
+{
+  "coauthors": {
+    "np": {
+      "name": "Nick Perry",
+      "email": "nick.perry604@gmail.com"
+    },
+    "pm": {
+      "name": "Paco Michelson",
+      "email": "tfpaco@gmail.com"
+    },
+    "ek": {
+      "name": "Esther Kim",
+      "email": "ekim1009@gmail.com"
+    },
+    "ch": {
+      "name": "Cruz Hernandez",
+      "email": "archzedzenrun@gmail.com"
+    }
+  }
+}

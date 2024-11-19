@@ -8,6 +8,11 @@ variable "public_subnet_id" {
   type = string
 }
 
+variable "private_subnet_id" {
+  description = "Private Subnet ID"
+  type = string
+}
+
 variable "aws_region" {
   description = "AWS region for ECS task definitions"
   type        = string
