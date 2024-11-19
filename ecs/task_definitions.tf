@@ -413,6 +413,10 @@ resource "aws_ecs_task_definition" "tumbleweed_app" {
         {
         containerPort = 3001
         protocol = "tcp"
+        },
+        {
+        containerPort = 4001
+        protocol = "tcp"
         }
       ]
       logConfiguration = {
