@@ -48,7 +48,7 @@ export const DestroyServices = async () => {
     const destroySpinner = ora(TumColors.lightYellow.bold('Burning Tumbleweed Down...')).start();
     await runCommand(terraformPath, ['destroy', '--auto-approve'], destroySpinner);
     destroySpinner.succeed(TumColors.lightYellow.bold('Finished Terraform Destroy!'));
-    console.log(TumColors.lightYellow.bold('Tumbleweed has been burned to ground!'));
+    console.log(TumColors.lightYellow.bold('Tumbleweed has been burned to the ground!'));
   } catch (error) {
     console.error(TumColors.darkOrange('Error during Tumbleweed incineration:', error.message));
     process.exit(1);
