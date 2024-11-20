@@ -1,6 +1,6 @@
 variable "region" {
   description = "AWS region"
-  default     = "us-east-1"
+  type        = string
 }
 
 variable "profile" {
@@ -11,4 +11,9 @@ variable "profile" {
 variable "allowed_ips" {
   description = "List of IP addresses allowed to access the ECS security group"
   type        = list(string)
+}
+
+variable "iam_arn" {
+  description = "iam_arn"
+  type        = string
 }
