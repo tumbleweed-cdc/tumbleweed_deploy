@@ -407,7 +407,7 @@ resource "aws_ecs_task_definition" "tumbleweed_app" {
   container_definitions = jsonencode([
     {
       name = "tumbleweed-app"
-      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/tumbleweed-app:1.4.1"
+      image = "314146319973.dkr.ecr.us-east-1.amazonaws.com/tumbleweed/tumbleweed-app:1.5"
       essential = true
       portMappings = [
         {
