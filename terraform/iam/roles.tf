@@ -7,7 +7,7 @@ resource "aws_iam_role" "consumer_access_role" {
       {
         Effect = "Allow",
         Principal = {
-          AWS = "arn:aws:iam::314146319973:user/nickyp"
+          AWS = var.iam_arn
         }
         Action = "sts:AssumeRole"
       }

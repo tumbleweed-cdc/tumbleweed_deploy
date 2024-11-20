@@ -34,5 +34,6 @@ module "ecs" {
 
 module "iam" {
   source = "./iam"
+  iam_arn = var.iam_arn
 }
 
