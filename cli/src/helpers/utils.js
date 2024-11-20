@@ -1,8 +1,9 @@
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 import ora from 'ora';
-import { input, select, Separator, confirm } from '@inquirer/prompts';
-import { validateListOfIps } from './helpers/validation.js';
+import { input, select, confirm } from '@inquirer/prompts';
+import { validateListOfIps } from './validation.js';
+import { TumColors } from './colors.js';
 
 export const getIamArn = async () => {
   while (true) {
@@ -17,7 +18,7 @@ export const getIamArn = async () => {
       return JSON.parse(iamUserInfo).User.Arn;
 
     } catch (error) {
-      console.log(chalk.red('\nInvalid IAM User Name. Please try again.\n'));
+      console.log(TumColors.darkOrange('\nInvalid IAM User Name. Please try again.\n'));
     }
   }
 };
@@ -45,7 +46,7 @@ export const getAwsRegion = async () => {
     });
     return awsRegion;  
   } catch (error) {
-    console.log(chalk.red(`\nAn error occurred while setting your AWS region: ${error}\n`));
+    console.log(TumColors.darkOrange(`\nAn error occurred while setting your AWS region: ${error}\n`));
   }
 };
 
@@ -59,23 +60,23 @@ export const getWhiteListIPs = async () => {
       const splitList = ipList.split(' ').filter(ip => ip !== '');
 
       if (!validateListOfIps(splitList)) {
-        console.log(chalk.red('\nInvalid IP address(es) entered. Please enter valid IP address(es).\n'));
+        console.log(TumColors.darkOrange('\nInvalid IP address(es) entered. Please enter valid IP address(es).\n'));
         continue;
       }
 
       return splitList.map(ip => `${ip}/32`);
     } catch (error) {
-      console.log(chalk.red(`\nAn error occurred inputting the whitelist IP(s): ${error}\n`));
+      console.log(TumColors.darkOrange(`\nAn error occurred inputting the whitelist IP(s): ${error}\n`));
       return;
     }
   }
 };
 
 export const confirmInfo = async (arn, region, whitelist) => {
-  console.log(chalk.green.bold("\nPlease Check Your Selections:\n"));
-  console.log(chalk.hex('#FCE197').bold("IAM ARN: ") + chalk.green(arn));
-  console.log(chalk.hex('#FCE197').bold("AWS Region: ") + chalk.green(region));
-  console.log(chalk.hex('#FCE197').bold("IP Whitelist: ") + chalk.green(whitelist));
+  console.log(TumColors.green.bold("\nPlease Check Your Selections:\n"));
+  console.log(TumColors.darkYellow.bold("IAM ARN: ") + chalk.green(arn));
+  console.log(TumColors.darkYellow.bold("AWS Region: ") + chalk.green(region));
+  console.log(TumColors.darkYellow.bold("IP Whitelist: ") + chalk.green(whitelist));
   console.log('\n');
 
   const confirmation = await confirm({ 
@@ -83,7 +84,7 @@ export const confirmInfo = async (arn, region, whitelist) => {
   console.log('\n');
 
   if (!confirmation) {
-    console.log(chalk.red('Deployment aborted, Please Try Again.'));
+    console.log(TumColors.darkOrange('Deployment aborted, Please Try Again.'));
     process.exit(0);
   }
 };
@@ -114,11 +115,11 @@ export const fetchAppIP = async () => {
     ipSpinner.succeed('Public IP fetched successfully.');
     taskSpinner.succeed('Tumbleweed-App UI public IP fetched successfully.');
     console.log('\n');
-    console.log(chalk.hex('#FCE197').bold(`Your Tumbleweed UI URL: `) +  chalk.green(`http://${publicIp}:3001`));
+    console.log(TumColors.darkYellow.bold(`Your Tumbleweed UI URL: `) +  chalk.green(`http://${publicIp}:3001`));
     console.log('\n');
   } catch (error) {
     taskSpinner.fail('Failed to fetch Tumbleweed UI IP.');
-    console.log(chalk.red(`An error occurred while fetching the public IP: ${error}`));
+    console.log(TumColors.darkOrange(`An error occurred while fetching the public IP: ${error}`));
   }
 };
 
