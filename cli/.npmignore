@@ -1,0 +1,14 @@
+node_modules/
+test/
+tests/
+dist/
+build/
+tmp/
+.env
+.npmrc
+docs/
+*.log
+.idea/
+.vscode/
+.git/
+.gitignore

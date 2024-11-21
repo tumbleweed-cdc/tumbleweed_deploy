@@ -1,9 +1,9 @@
 {
-  "name": "tumbleweed_cli",
+  "name": "tumbleweed_cdc",
   "version": "1.0.0",
   "main": "index.js",
   "bin": {
-    "tumbleweed": "./src/index.js"
+    "tumbleweed": "src/index.js"
   },
   "type": "module",
   "scripts": {

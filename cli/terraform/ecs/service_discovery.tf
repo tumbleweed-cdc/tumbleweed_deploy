@@ -1,11 +1,9 @@
-# Private DNS Namespace for Service Discovery
 resource "aws_service_discovery_private_dns_namespace" "kafka" {
   name        = "kafka.local"
   description = "Kafka cluster service discovery namespace"
   vpc         = var.vpc_id
 }
 
-# Service Discovery for Controllers
 resource "aws_service_discovery_service" "kafka_controller_1" {
   name = "controller-1"
 
@@ -45,7 +43,6 @@ resource "aws_service_discovery_service" "kafka_controller_3" {
   }
 }
 
-# Service Discovery for Brokers
 resource "aws_service_discovery_service" "kafka_broker_1" {
   name = "kafka-1"
 
@@ -85,7 +82,6 @@ resource "aws_service_discovery_service" "kafka_broker_3" {
   }
 }
 
-# Service Discovery for Connect and Apicurio
 resource "aws_service_discovery_service" "connect" {
   name = "connect"
 
