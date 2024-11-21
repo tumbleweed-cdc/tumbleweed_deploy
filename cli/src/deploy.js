@@ -25,7 +25,7 @@ iam_arn = "${userDeployInfo.iamArn}"
 region = "${userDeployInfo.awsRegion}"
 allowed_ips = [${userDeployInfo.whiteListIPs.map(ip => `"${ip}"`).join(", ")}]`;
 
-  const terraformDir = path.join(__dirname, '../../terraform/');
+  const terraformDir = path.join(__dirname, '../terraform/');
 
   fs.writeFileSync(`${terraformDir}/terraform.tfvars`, tfvarsContent.trim());
 

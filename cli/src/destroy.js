@@ -11,7 +11,7 @@ export const DestroyServices = async () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const terraformPath = await getTerraformPath();
-  const terraformDir = path.join(__dirname, '../../terraform/');
+  const terraformDir = path.join(__dirname, '../terraform/');
 
   const runCommand = (command, args, spinner) => {
     return new Promise((resolve, reject) => {
