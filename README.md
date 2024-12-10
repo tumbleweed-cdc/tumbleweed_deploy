@@ -1,6 +1,6 @@
 ## 🚀 Deployment
 
-Tumbleweed uses a custom CLI tool and Terraform to provision and deploy Tumbleweed pipelines on AWS ECS (Elastic Cloud Services) using Fargate.
+Tumbleweed provides a custom Command Line Interface (CLI) tool and uses Terraform to provision and deploy Tumbleweed pipelines on AWS ECS (Elastic Cloud Services) using Fargate.
 
 Prerequisites:
 
