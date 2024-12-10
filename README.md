@@ -1,5 +1,7 @@
 ## 🚀 Deployment
 
+Tumbleweed uses a custom CLI tool and Terraform to provision and deploy Tumbleweed pipelines on AWS ECS (Elastic Cloud Services) using Fargate.
+
 Prerequisites:
 
 * An Amazon Web Services (AWS) account
@@ -7,9 +9,9 @@ Prerequisites:
 * Install [AWS CLI](https://aws.amazon.com/cli/)
 * Install [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-You are now ready to deploy Tumbleweed! A Command-Line Interface (CLI) tool is provided to simplify the setup and deployment of a Tumbleweed pipeline.
+You are now ready to deploy Tumbleweed!
 
-Now run the following command in your command line to get started:
+Run the following command in your command line to get started:
 
 ```
 npx tumbleweed_cdc roll
